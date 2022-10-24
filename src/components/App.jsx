@@ -1,6 +1,7 @@
-// import { TailSpin } from 'react-loader-spinner';
-import { fetchImages } from './Api/Api';
 import { Component } from 'react';
+import { fetchImages } from './Api/Api';
+// import { TailSpin } from 'react-loader-spinner';
+import { Searchbar } from './Searchbar/Searchbar';
 
 const INITIAL_STATE = {
   images: [],
@@ -11,6 +12,16 @@ const INITIAL_STATE = {
 
 export class App extends Component {
   state = { ...INITIAL_STATE };
+
+  handleSubmit = evt => {
+    evt.preventDefault();
+
+    const form = evt.currentTarget;
+    const input = form.elements.input.value;
+    this.props.onSubmit({ input });
+    console.log(input);
+    form.reset();
+  };
 
   async componentDidMount() {
     try {
@@ -27,17 +38,14 @@ export class App extends Component {
     return (
       <div
         style={{
-          height: '100vh',
           display: 'grid',
           gridTemplateColumns: '1fr',
           gridGap: '16px',
           paddingBottom: '24px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
         }}
-      ></div>
+      >
+        <Searchbar />
+      </div>
     );
   }
 }
