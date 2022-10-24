@@ -32,6 +32,11 @@ export class App extends Component {
       try {
         const fetch = await fetchImages(this.state.search, 1, 12);
         this.setState({ images: fetch.hits });
+        document.addEventListener('keyup', e => {
+          if (e.key === 'Escape') {
+            this.closeModal();
+          }
+        });
       } catch (error) {
         console.log(error.message);
       } finally {

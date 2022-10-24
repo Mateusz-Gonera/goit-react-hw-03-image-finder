@@ -12,6 +12,6 @@
 }
 
 .modal {
-  max-width: 55vw;
-  max-height: auto;
+  max-width: calc(55vw - 100px);
+  max-height: 80vh;
 }
