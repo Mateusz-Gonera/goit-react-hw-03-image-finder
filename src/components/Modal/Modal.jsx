@@ -10,3 +10,8 @@ export const Modal = ({ clickImage, handleClose }) => {
     </div>
   );
 };
+
+Modal.propTypes = {
+  clickImage: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+};
