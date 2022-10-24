@@ -18,14 +18,13 @@ export class App extends Component {
 
     const form = evt.currentTarget;
     const input = form.elements.input.value;
-    this.props.onSubmit({ input });
-    console.log(input);
+    this.setState({ search: input });
     form.reset();
   };
 
-  async componentDidMount() {
+  async componentDidUpdate() {
     try {
-      const fetch = await fetchImages('cat', 1, 12);
+      const fetch = await fetchImages(this.state.search, 1, 12);
       console.log(fetch.hits);
     } catch (error) {
       console.log(error.message);
@@ -33,6 +32,8 @@ export class App extends Component {
       console.log('ffffff');
     }
   }
+
+  async componentDidMount() {}
 
   render() {
     return (
@@ -44,7 +45,7 @@ export class App extends Component {
           paddingBottom: '24px',
         }}
       >
-        <Searchbar />
+        <Searchbar handleSubmit={this.handleSubmit} />
       </div>
     );
   }

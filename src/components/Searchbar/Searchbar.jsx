@@ -12,6 +12,7 @@ export const Searchbar = ({ handleSubmit }) => {
         <input
           className={styles.input}
           type="text"
+          name="input"
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
@@ -19,4 +20,8 @@ export const Searchbar = ({ handleSubmit }) => {
       </form>
     </header>
   );
+};
+
+Searchbar.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
 };
