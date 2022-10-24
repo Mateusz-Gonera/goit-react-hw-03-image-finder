@@ -4,6 +4,7 @@ import { fetchImages } from './Api/Api';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import { Modal } from './Modal/Modal';
 
 const INITIAL_STATE = {
   images: [],
@@ -11,6 +12,7 @@ const INITIAL_STATE = {
   isLoading: false,
   search: '',
   isModalOpen: false,
+  largeImage: '',
 };
 
 export class App extends Component {
@@ -46,12 +48,16 @@ export class App extends Component {
     const element = this.state.images.filter(image => {
       return image.id === imageID;
     });
-    this.setState({ isModalOpen: true });
-    return element[0].largeImageURL;
+    const clickImg = element[0];
+    this.setState({ isModalOpen: true, largeImage: clickImg });
+  };
+
+  closeModal = () => {
+    this.setState({ isModalOpen: false });
   };
 
   render() {
-    const { images } = this.state;
+    const { images, largeImage, isModalOpen } = this.state;
     return (
       <div
         style={{
@@ -61,7 +67,11 @@ export class App extends Component {
           paddingBottom: '24px',
         }}
       >
+        {isModalOpen ? (
+          <Modal clickImage={largeImage} handleClose={this.closeModal} />
+        ) : null}
         <Searchbar handleSubmit={this.handleSubmit} />
+
         <ImageGallery>
           <ImageGalleryItem images={images} onClick={this.handleImageClick} />
         </ImageGallery>
