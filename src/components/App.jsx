@@ -5,14 +5,15 @@ export const App = () => {
     <div
       style={{
         height: '100vh',
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridGap: '16px',
+        paddingBottom: '24px',
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 40,
         color: '#010101',
       }}
-    >
-      React homework template
-    </div>
+    ></div>
   );
 };

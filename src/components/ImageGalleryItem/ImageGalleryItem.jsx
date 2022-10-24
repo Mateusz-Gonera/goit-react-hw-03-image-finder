@@ -1,2 +1,2 @@
-import ImageCSS from './ImageGalleryItem.module.css';
+import styles from './ImageGalleryItem.module.css';
 import PropTypes from 'prop-types';
