@@ -1,10 +1,11 @@
 import { Component } from 'react';
 import { fetchImages } from './Api/Api';
-// import { TailSpin } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Modal } from './Modal/Modal';
+import { Button } from './Button/Button';
 
 const INITIAL_STATE = {
   images: [],
@@ -13,6 +14,7 @@ const INITIAL_STATE = {
   search: '',
   isModalOpen: false,
   largeImage: '',
+  page: 4,
 };
 
 export class App extends Component {
@@ -29,8 +31,9 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.search !== this.state.search) {
+      this.setState({ isLoading: true });
       try {
-        const fetch = await fetchImages(this.state.search, 1, 12);
+        const fetch = await fetchImages(this.state.search, this.state.page, 12);
         this.setState({ images: fetch.hits });
         document.addEventListener('keyup', e => {
           if (e.key === 'Escape') {
@@ -40,13 +43,18 @@ export class App extends Component {
       } catch (error) {
         console.log(error.message);
       } finally {
-        console.log('ffffff');
+        this.setState({ isLoading: false });
       }
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.setState({ page: 1 });
     // console.log(this.state.images);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', e => {});
   }
 
   handleImageClick = imageID => {
@@ -62,7 +70,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, largeImage, isModalOpen } = this.state;
+    const { images, largeImage, isModalOpen, isLoading } = this.state;
     return (
       <div
         style={{
@@ -78,8 +86,44 @@ export class App extends Component {
         <Searchbar handleSubmit={this.handleSubmit} />
 
         <ImageGallery>
+          {isLoading && (
+            <TailSpin
+              height="80"
+              width="80"
+              color="#346341"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{
+                position: 'absolute',
+                right: '50%',
+                top: '50%',
+                zIndex: '1100',
+              }}
+              wrapperClass=""
+              visible={true}
+            />
+          )}
           <ImageGalleryItem images={images} onClick={this.handleImageClick} />
         </ImageGallery>
+        {isLoading & (images.length > 0) && (
+          <TailSpin
+            height="80"
+            width="80"
+            color="#346341"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{
+              position: 'absolute',
+              right: '50%',
+              top: '50%',
+              zIndex: '1100',
+            }}
+            wrapperClass=""
+            visible={true}
+          />
+        )}
+
+        {images.length === 0 ? null : <Button />}
       </div>
     );
   }
