@@ -8,3 +8,7 @@ export const Button = ({ handleClick }) => {
     </button>
   );
 };
+
+Button.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+};
