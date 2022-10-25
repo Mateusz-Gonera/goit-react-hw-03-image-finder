@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   search: '',
   isModalOpen: false,
   largeImage: '',
-  page: 4,
+  page: 1,
 };
 
 export class App extends Component {
@@ -30,11 +30,15 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.search !== this.state.search) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.search !== this.state.search
+    ) {
       this.setState({ isLoading: true });
       try {
         const fetch = await fetchImages(this.state.search, this.state.page, 12);
-        this.setState({ images: fetch.hits });
+        console.log(this.state.page);
+        this.setState(({ images }) => ({ images: [...images, ...fetch.hits] }));
         document.addEventListener('keyup', e => {
           if (e.key === 'Escape') {
             this.closeModal();
@@ -48,8 +52,8 @@ export class App extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({ page: 1 });
+  async componentDidMount() {
+    this.setState({ images: [], page: 1 });
     // console.log(this.state.images);
   }
 
@@ -69,6 +73,10 @@ export class App extends Component {
     this.setState({ isModalOpen: false });
   };
 
+  loadMoreClick = () => {
+    this.setState(({ page }) => ({ page: page + 1 }));
+  };
+
   render() {
     const { images, largeImage, isModalOpen, isLoading } = this.state;
     return (
@@ -86,7 +94,7 @@ export class App extends Component {
         <Searchbar handleSubmit={this.handleSubmit} />
 
         <ImageGallery>
-          {isLoading && (
+          {isLoading ? (
             <TailSpin
               height="80"
               width="80"
@@ -102,28 +110,14 @@ export class App extends Component {
               wrapperClass=""
               visible={true}
             />
+          ) : (
+            <ImageGalleryItem images={images} onClick={this.handleImageClick} />
           )}
-          <ImageGalleryItem images={images} onClick={this.handleImageClick} />
         </ImageGallery>
-        {isLoading & (images.length > 0) && (
-          <TailSpin
-            height="80"
-            width="80"
-            color="#346341"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-            wrapperStyle={{
-              position: 'absolute',
-              right: '50%',
-              top: '50%',
-              zIndex: '1100',
-            }}
-            wrapperClass=""
-            visible={true}
-          />
-        )}
 
-        {images.length === 0 ? null : <Button />}
+        {images.length === 0 ? null : (
+          <Button handleClick={this.loadMoreClick} />
+        )}
       </div>
     );
   }
