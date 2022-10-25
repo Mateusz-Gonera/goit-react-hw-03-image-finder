@@ -25,7 +25,7 @@ export class App extends Component {
 
     const form = evt.currentTarget;
     const input = form.elements.input.value;
-    this.setState({ search: input });
+    this.setState({ images: [], search: input, page: 1 });
     form.reset();
   };
 
@@ -37,7 +37,6 @@ export class App extends Component {
       this.setState({ isLoading: true });
       try {
         const fetch = await fetchImages(this.state.search, this.state.page, 12);
-        console.log(this.state.images);
         this.setState(({ images }) => ({ images: [...images, ...fetch.hits] }));
         document.addEventListener('keyup', e => {
           if (e.key === 'Escape') {
