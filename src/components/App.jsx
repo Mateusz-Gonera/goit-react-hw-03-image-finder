@@ -37,7 +37,7 @@ export class App extends Component {
       this.setState({ isLoading: true });
       try {
         const fetch = await fetchImages(this.state.search, this.state.page, 12);
-        console.log(this.state.page);
+        console.log(this.state.images);
         this.setState(({ images }) => ({ images: [...images, ...fetch.hits] }));
         document.addEventListener('keyup', e => {
           if (e.key === 'Escape') {
