@@ -98,17 +98,15 @@ export class App extends Component {
           <Modal clickImage={largeImage} handleClose={this.closeModal} />
         ) : null}
         <Searchbar handleSubmit={this.handleSubmit} />
-
+        {isLoading & (page <= 1) ? <Loader /> : null}
         <ImageGallery>
-          {isLoading & (page <= 1) ? <Loader /> : null}
-
           <ImageGalleryItem
             images={images}
             onClick={this.handleImageClick}
             loading={isLoading}
           />
-          {isLoading & (page >= 2) ? <Loader /> : null}
         </ImageGallery>
+        {isLoading & (page >= 2) ? <Loader /> : null}
 
         {images.length === 0 ? null : (
           <Button handleClick={this.loadMoreClick} />
