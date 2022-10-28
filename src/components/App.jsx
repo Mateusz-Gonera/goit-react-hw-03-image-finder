@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { fetchImages } from './Api/Api';
-import { TailSpin } from 'react-loader-spinner';
+import { Loader } from './Loader/Loader';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
@@ -73,7 +73,14 @@ export class App extends Component {
   };
 
   loadMoreClick = () => {
-    this.setState(({ page }) => ({ page: page + 1 }));
+    this.setState({ isLoading: true });
+    try {
+      this.setState(({ page }) => ({ page: page + 1 }));
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   render() {
@@ -93,25 +100,13 @@ export class App extends Component {
         <Searchbar handleSubmit={this.handleSubmit} />
 
         <ImageGallery>
-          {isLoading ? (
-            <TailSpin
-              height="80"
-              width="80"
-              color="#346341"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-              wrapperStyle={{
-                position: 'absolute',
-                right: '50%',
-                top: '50%',
-                zIndex: '1100',
-              }}
-              wrapperClass=""
-              visible={true}
-            />
-          ) : (
-            <ImageGalleryItem images={images} onClick={this.handleImageClick} />
-          )}
+          {isLoading && <Loader />}
+
+          <ImageGalleryItem
+            images={images}
+            onClick={this.handleImageClick}
+            loading={isLoading}
+          />
         </ImageGallery>
 
         {images.length === 0 ? null : (
