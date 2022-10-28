@@ -100,7 +100,7 @@ export class App extends Component {
         <Searchbar handleSubmit={this.handleSubmit} />
 
         <ImageGallery>
-          {isLoading && <Loader />}
+          {isLoading & (page <= 1) ? <Loader /> : null}
 
           <ImageGalleryItem
             images={images}
