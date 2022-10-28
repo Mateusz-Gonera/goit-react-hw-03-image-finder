@@ -84,7 +84,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, largeImage, isModalOpen, isLoading } = this.state;
+    const { images, largeImage, isModalOpen, isLoading, page } = this.state;
     return (
       <div
         style={{
@@ -107,6 +107,7 @@ export class App extends Component {
             onClick={this.handleImageClick}
             loading={isLoading}
           />
+          {isLoading & (page >= 2) ? <Loader /> : null}
         </ImageGallery>
 
         {images.length === 0 ? null : (
