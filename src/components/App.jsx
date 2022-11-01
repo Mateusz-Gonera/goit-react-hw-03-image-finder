@@ -57,7 +57,11 @@ export class App extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keyup', e => {});
+    document.removeEventListener('keyup', e => {
+      if (e.key === 'Escape') {
+        this.closeModal();
+      }
+    });
   }
 
   handleImageClick = imageID => {
