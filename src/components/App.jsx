@@ -53,7 +53,6 @@ export class App extends Component {
 
   async componentDidMount() {
     this.setState({ images: [], page: 1 });
-    // console.log(this.state.images);
   }
 
   componentWillUnmount() {
